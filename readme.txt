@@ -1,11 +1,11 @@
 === Discordance ===
 Contributors: jinxrat
 Tags: post, webhook, discord, discord server, discord channel, custom types
-Donate link: https://www.buymeacoffee.com/jinxrat
+Donate link: https://jinxr.at/donate
 Requires PHP: 7.0
 Requires at least: 5.6.0
 Tested up to: 5.7.0
-Stable tag: 0.2.1
+Stable tag: 0.2.2
 License: GPLv2 or later
 
 Send your posts to Discord using Webhooks

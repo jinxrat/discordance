@@ -1,6 +1,6 @@
 {
   "name": "discordance",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An WordPress plugin to send your posts to Discord using Webhooks",
   "scripts": {
     "start": "npm install && webpack -d --watch",
@@ -16,7 +16,7 @@
     "plugin",
     "discord"
   ],
-  "author": "Di Ronis",
+  "author": "Di \"JINXRAT\" Ronis",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/jinxrat/discordance/issues"

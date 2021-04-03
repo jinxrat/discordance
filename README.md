@@ -4,16 +4,10 @@ An WordPress plugin to send your posts to Discord using Webhooks.
 
 ## Installation
 
-1. Within your WordPress installation, navigate to `/wp-content/plugins/` and run the following command:
-
-```bash
-git clone https://github.com/jinxrat/discordance.git
-```
-
-or upload the `discordance` folder to the `/wp-content/plugins/` directory.
-
-2. Activate the plugin through the `Plugins` menu in WordPress.
-3. Navigate to `Discordance` in the WordPress admin to configure the plugin.
+1. Download the Discordance plugin: https://wordpress.org/plugins/discordance/
+2. Upload the `discordance` folder to the `/wp-content/plugins/` directory.
+3. Activate the plugin through the "Plugins" menu in WordPress.
+4. Navigate to Discordance in the WordPress admin to configure the plugin.
 
 ## Creating webhooks
 

@@ -3,10 +3,10 @@
 Plugin Name: Discordance
 Plugin URI: https://github.com/jinxrat/discordance
 Description: An WordPress plugin to send your posts to Discord using Webhooks.
-Version: 0.2.1
-Author: Di "JiNXRaT" Ronis
-Author URI: https://jinxrat.co
-Donate link: https://www.buymeacoffee.com/jinxrat
+Version: 0.2.2
+Author: JINXRAT
+Author URI: https://jinxr.at/
+Donate link: https://jinxr.at/donate
 License: GPLv2 or later
 */
 
@@ -122,6 +122,13 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
                     (!empty($post->post_excerpt) ? $post->post_excerpt : $post->post_content)
                 )
             );
+            $tag_list = get_the_terms($postID, 'post_tag');
+            $tags = array_map(function ($tag) {
+                return $tag->name;
+            }, $tag_list);
+            $hashtags = array_map(function ($tag) {
+                return "#" . str_replace("-", "", $tag->slug);
+            }, $tag_list);
             $categories = get_the_category($postID);
             $postType = get_post_type_object($post->post_type);
             $postTypeName = mb_strtolower($postType->labels->singular_name);
@@ -134,6 +141,8 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
                 '%thumbnail%' => get_the_post_thumbnail_url($post->ID, 'thumbnail'),
                 '%image%' => get_the_post_thumbnail_url($post->ID, 'large'),
                 '%category%' => isset($categories[0]) ? mb_strtolower($categories[0]->name) : $postTypeName,
+                '%hashtags%' => implode(" ", $hashtags),
+                '%tags%' => implode(", ", $tags),
                 '%link%' => get_permalink($post->ID),
                 '%type%' => $postTypeName
             );
