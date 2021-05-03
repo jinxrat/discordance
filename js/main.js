@@ -26,39 +26,33 @@ function insertAtCursor(el, value) {
     el.dispatchEvent(new KeyboardEvent("keyup"))
 }
 
-/* Position the tooltip */
-function positionTooltip(parent, tooltip, padding = 5) {
-    const parentCoords = parent.getBoundingClientRect()
-    const tooltipCoords = tooltip.getBoundingClientRect()
-    const left = Math.round(parentCoords.left - ((tooltipCoords.width - parentCoords.width) / 2))
-    const top = parentCoords.top - (tooltipCoords.height + padding)
-    tooltip.style.left = `${left}px`
-    tooltip.style.top = `${top}px`
-}
-
 /* Main Discordance JS */
 (function () {
-    const form = document.querySelector("form")
-    const webhooks = document.querySelector("#webhooks")
-    const format_warn = document.querySelector("#format-warn")
-    const format = document.querySelector("#format")
-    const pretty = document.querySelector("#pretty")
-    const submit = document.querySelector("#submit")
+    const form = document.getElementById("discordanceForm")
+    const webhooks = document.getElementById("webhooks")
+    const format_warn = document.getElementById("format-warn")
+    const format = document.getElementById("format")
+    const pretty = document.getElementById("pretty")
+    const submit = document.getElementById("submit")
     webhooks.addEventListener("keyup", function (e) {
         e.preventDefault()
-        webhooks.value = webhooks.value
+        e.target.value = e.target.value
             .replace(/\s|\,/g, "\n")
     })
     format.addEventListener("keyup", function (e) {
         e.preventDefault()
         try {
-            JSON.parse(format.value)
-            format_warn.style.opacity = 0
+            JSON.parse(e.target.value)
+            if (!format_warn.classList.contains("d-none")) {
+                format_warn.classList.add("d-none")
+            }
             if (submit.hasAttribute("disabled")) {
                 submit.removeAttribute("disabled")
             }
         } catch (err) {
-            format_warn.style.opacity = 1
+            if (format_warn.classList.contains("d-none")) {
+                format_warn.classList.remove("d-none")
+            }
             if (!submit.hasAttribute("disabled")) {
                 submit.setAttribute("disabled", true)
             }
@@ -73,6 +67,7 @@ function positionTooltip(parent, tooltip, padding = 5) {
         }
     })
     form.addEventListener("submit", function (e) {
+        e.preventDefault()
         const valid_webhooks = new Set()
         webhooks.value
             .split("\n")
@@ -80,16 +75,42 @@ function positionTooltip(parent, tooltip, padding = 5) {
             .map(v => valid_webhooks.add(v))
         webhooks.value = Array.from(valid_webhooks).join("\n")
         pretty.click()
+        submit.setAttribute('disabled', true)
+        fetch(`${DISCORDANCE.rest_url}discordance/v1/update?_method=PUT`, {
+            method: "POST",
+            headers: {
+                "X-WP-Nonce": DISCORDANCE.nonce
+            },
+            body: new FormData(form)
+        })
+            .then(response => response.json())
+            .then(({ success }) => {
+                submit.removeAttribute('disabled')
+                if (success) return document.querySelector('#discordance-update-prompt').classList.remove('d-none')
+            })
+            .catch((_) => submit.removeAttribute('disabled'))
         return true
     })
-    autosize(document.querySelectorAll("textarea"))
-    const variables = document.querySelectorAll("#helper .variables span.button")
-    variables.forEach(variable => {
-        variable.addEventListener("mouseover", function (e) {
-            positionTooltip(e.currentTarget, e.currentTarget.querySelector("span"), 0)
+    const textareas = [].slice.call(document.querySelectorAll("textarea"))
+    textareas.map(function (textEl) {
+        autosize(textEl)
+    })
+    const variables = [].slice.call(document.querySelectorAll("button.variable"))
+    variables.map(function (varEl) {
+        varEl.addEventListener("click", function (e) {
+            e.preventDefault()
+            insertAtCursor(format, e.currentTarget.textContent)
         })
-        variable.addEventListener("click", function (e) {
-            insertAtCursor(format, e.currentTarget.innerHTML.replace(/(%.*%).*/, '$1'))
+    })
+    const popoverList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    popoverList.map(function (popoverEl) {
+        return new bootstrap.Popover(popoverEl)
+    })
+    const tabList = [].slice.call(document.querySelectorAll('button[data-bs-toggle="tab"]'))
+    tabList.map(function (tabEl) {
+        tabEl.addEventListener("shown.bs.tab", function (e) {
+            const target = document.querySelector(e.target.getAttribute("data-bs-target"))
+            if (target.querySelector("textarea")) autosize.update(target.querySelector("textarea"))
         })
     })
 })()

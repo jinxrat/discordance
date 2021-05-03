@@ -3,7 +3,7 @@ const {
 	plugins: { registerPlugin },
 	element: { useState, useEffect },
 	components: { CheckboxControl },
-	editPost: { PluginPrePublishPanel/* PluginDocumentSettingPanel */ },
+	editPost: { PluginPrePublishPanel, PluginDocumentSettingPanel },
 } = wp;
 const DiscordanceSettings = () => {
 	const { meta: { _discordance_checked }, status } = useSelect((select) => ({
@@ -21,13 +21,22 @@ const DiscordanceSettings = () => {
 	}, [checked]);
 	if (status === 'publish') return null;
 	return (
-		<PluginPrePublishPanel name='discordance' title='Discordance'>
-			<CheckboxControl
-				label='Send to Discord'
-				checked={checked}
-				onChange={setChecked}
-			/>
-		</PluginPrePublishPanel>
+		<>
+			<PluginPrePublishPanel name='discordance' title='Discordance'>
+				<CheckboxControl
+					label='Send to Discord'
+					checked={checked}
+					onChange={setChecked}
+				/>
+			</PluginPrePublishPanel>
+			<PluginDocumentSettingPanel name='discordance' title='Discordance'>
+				<CheckboxControl
+					label='Send to Discord'
+					checked={checked}
+					onChange={setChecked}
+				/>
+			</PluginDocumentSettingPanel>
+		</>
 	);
 };
 registerPlugin('discordance', {

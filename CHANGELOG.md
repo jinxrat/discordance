@@ -1,5 +1,8 @@
 ## Changelog
 
+##### 1.0.0
+- Redesign
+
 ##### 0.2.2 - Tags, tags and tags!
 - Added requested %tags% and %hashtags% variables (#1)
 
