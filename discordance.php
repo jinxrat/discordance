@@ -80,9 +80,13 @@ add_action('rest_api_init', function () {
         'methods' => 'PUT',
         'callback' => function (WP_REST_Request $request) {
             $request_body = $request->get_body_params();
-            if (isset($request_body['webhooks']) && isset($request_body['format']) && isset($request_body['types'])) {
+            if (
+                isset($request_body['webhooks']) &&
+                isset($request_body['format'])
+                ) {
                 $discordance_opts['webhooks'] = sanitize_textarea_field($request_body['webhooks']);
                 $discordance_opts['format'] = wp_encode_emoji($request_body['format']);
+                $discordance_opts['categories'] = isset($request_body['categories']) && is_array($request_body['categories']) ? $request_body['categories'] : [];
                 $discordance_opts['types'] = isset($request_body['types']) && is_array($request_body['types']) ? $request_body['types'] : [];
                 $discordance_opts = filter_var_array($discordance_opts, FILTER_SANITIZE_STRING);
                 if (update_option('discordance', $discordance_opts)) {
@@ -194,8 +198,6 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
                 $product = wc_get_product($postID);
                 $variables = array_merge($variables, array(
                     '%price%' => $product->get_price(),
-                    '%regprice%' => $product->get_regular_price(),
-                    '%saleprice%' => $product->get_sale_price()
                 ));
             }
             $embed = $discordance_opts['format'];

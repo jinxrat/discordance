@@ -15,9 +15,7 @@ $discordance_tags = array(
 );
 if (function_exists('wc_get_product')) {
     $discordance_tags = array_merge($discordance_tags, array(
-        '%price%' => '',
-        '%regprice%' => '',
-        '%saleprice%' => ''
+        '%price%' => 'product price',
     ));
 } ?>
 <label for="format" class="h5">Embed format</label>

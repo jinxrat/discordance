@@ -12,16 +12,16 @@
             <button class="nav-link" id="embed-tab" data-bs-toggle="tab" data-bs-target="#tab-embed"
                 type="button" role="tab" aria-controls="tab-embed" aria-selected="false">Embed format</button>
             <button class="nav-link" id="types-tab" data-bs-toggle="tab" data-bs-target="#tab-types"
-                type="button" role="tab" aria-controls="tab-types" aria-selected="false">Post types</button>
+                type="button" role="tab" aria-controls="tab-types" aria-selected="false">Post types/Categories</button>
         </div>
         <div class="tab-content p-3 border border-top-0 position-relative" id="tabContent">
-            <div class="tab-pane fade show active" id="tab-webhooks" role="tabpanel" aria-labelledby="webhooks-tab">
+            <div class="tab-pane container fade show active" id="tab-webhooks" role="tabpanel" aria-labelledby="webhooks-tab">
                 <?php include_once('webhooks.php');?>
             </div>
-            <div class="tab-pane fade" id="tab-embed" role="tabpanel" aria-labelledby="embed-tab">
+            <div class="tab-pane container fade" id="tab-embed" role="tabpanel" aria-labelledby="embed-tab">
                 <?php include_once('embed.php');?>
             </div>
-            <div class="tab-pane fade" id="tab-types" role="tabpanel" aria-labelledby="types-tab">
+            <div class="tab-pane container fade" id="tab-types" role="tabpanel" aria-labelledby="types-tab">
                 <?php include_once('types.php');?>
             </div>
         </div>
