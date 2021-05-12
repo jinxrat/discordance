@@ -12,10 +12,9 @@ License: GPLv2 or later
 
 defined('ABSPATH') or die;
 $discordance_opts = get_option('discordance');
+$discordance_webhook_pattern = '/^(https\:\/\/(www\.)?discord\.com\/api\/webhooks\/([0-9]+)\/([a-zA-Z0-9_-]+))/';
 add_action('init', function () {
     global $discordance_opts;
-    $current_user = wp_get_current_user();
-    $current_user_id = $current_user->ID;
     if (!is_array($discordance_opts)) {
         add_action('admin_notices', function () {
             global $hook_suffix;
@@ -76,6 +75,19 @@ add_action('init', function () {
     }
 });
 add_action('rest_api_init', function () {
+    register_rest_route('discordance/v1', '/options', array(
+        'methods' => 'GET',
+        'callback' => function () {
+            global $discordance_opts;
+            return array(
+                'active_types' => isset($discordance_opts['types']) ? $discordance_opts['types'] : [],
+                'disabled_categories_ids' => isset($discordance_opts['categories']) ? $discordance_opts['categories'] : [],
+            );
+        },
+        'permission_callback' => function () {
+            return true;
+        }
+    ));
     register_rest_route('discordance/v1', '/update', array(
         'methods' => 'PUT',
         'callback' => function (WP_REST_Request $request) {
@@ -152,7 +164,7 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
         return;
     }
     add_action('wp_after_insert_post', function ($postID, $post, $update) {
-        global $discordance_opts;
+        global $discordance_opts, $discordance_webhook_pattern;
         if ($post->_discordance_checked && $post->_discordance_state !== 'publish') {
             $title = sanitize_text_field($post->post_title);
             $excerpt = sanitize_text_field(
@@ -191,18 +203,22 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
             );
             if (function_exists('wc_get_product')) {
                 $product = wc_get_product($postID);
-                $variables = array_merge($variables, array(
-                    '%price%' => $product->get_price(),
-                ));
+                if ($product instanceof WC_Product) {
+                    $variables = array_merge($variables, array(
+                        '%price%' => $product->get_price(),
+                    ));
+                }
             }
             $embed = $discordance_opts['format'];
             foreach ($variables as $search => $replace) {
                 $embed = html_entity_decode(str_replace($search, $replace, $embed));
             }
             $hooks = preg_split('/\r\n|\r|\n/', $discordance_opts['webhooks']);
-            foreach ($hooks as $hook) {
+            function sendToDiscord($hook, $embed)
+            {
+                global $discordance_webhook_pattern;
                 $url = trim($hook);
-                if (preg_match('/^(https\:\/\/(www\.)?discord\.com\/api\/webhooks\/([0-9]+)\/([a-zA-Z0-9_-]+))/', $url)) {
+                if (preg_match($discordance_webhook_pattern, $url)) {
                     $data = wp_remote_post($url, array(
                         'data_format' => 'body',
                         'headers' => array('Content-Type' => 'application/json'),
@@ -211,6 +227,28 @@ add_action('transition_post_status', function ($newStatus, $oldStatus, $post) {
                     if ($data['response']['code'] >= 300) {
                         error_log($data['body']);
                     }
+                }
+            }
+            if (
+                isset($discordance_opts['categories']) &&
+                count(array_filter($categories, function ($category) {
+                    global $discordance_opts;
+                    return in_array(
+                        $category->cat_ID,
+                        $discordance_opts['categories']
+                    );
+                })) > 0
+            ) {
+                return;
+            }
+            if (
+                isset($discordance_opts['webhook-' . $post->post_type]) &&
+                preg_match($discordance_webhook_pattern, trim($discordance_opts['webhook-' . $post->post_type]))
+            ) {
+                sendToDiscord($discordance_opts['webhook-' . $post->post_type], $embed);
+            } else {
+                foreach ($hooks as $hook) {
+                    sendToDiscord($hook, $embed);
                 }
             }
             update_post_meta($post->ID, '_discordance_state', $post->post_status);

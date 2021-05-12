@@ -26,6 +26,10 @@ function insertAtCursor(el, value) {
     el.dispatchEvent(new KeyboardEvent("keyup"))
 }
 
+function valid_discord_webhook(value) {
+    return /^(https\:\/\/(www\.)?discord\.com\/api\/webhooks\/([0-9]+)\/([a-zA-Z0-9_-]+))/.test(value)
+}
+
 /* Main Discordance JS */
 (function () {
     const form = document.getElementById("discordanceForm")
@@ -34,6 +38,7 @@ function insertAtCursor(el, value) {
     const format = document.getElementById("format")
     const pretty = document.getElementById("pretty")
     const submit = document.getElementById("submit")
+    const type_webhooks = document.querySelectorAll(".type-webhook")
     webhooks.addEventListener("keyup", function (e) {
         e.preventDefault()
         e.target.value = e.target.value
@@ -68,10 +73,13 @@ function insertAtCursor(el, value) {
     })
     form.addEventListener("submit", function (e) {
         e.preventDefault()
+        type_webhooks.map(webhook => {
+            if (!valid_discord_webhook(webhook.value)) webhook.value = ""
+        })
         const valid_webhooks = new Set()
         webhooks.value
             .split("\n")
-            .filter(v => /^(https\:\/\/(www\.)?discord\.com\/api\/webhooks\/([0-9]+)\/([a-zA-Z0-9_-]+))/.test(v))
+            .filter(v => valid_discord_webhook(v))
             .map(v => valid_webhooks.add(v))
         webhooks.value = Array.from(valid_webhooks).join("\n")
         pretty.click()

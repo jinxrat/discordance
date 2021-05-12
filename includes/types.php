@@ -37,11 +37,11 @@ $categories = get_categories(array(
 <div class="h5 mb-3">Disabled posts categories</div>
 <?php
 foreach ($categories as $category) {
-    $checked = isset($discordance_opts['categories']) ? (in_array($category->term_id, $discordance_opts['categories']) ? " checked" : "") : "";
+    $checked = isset($discordance_opts['categories']) ? (in_array($category->cat_ID, $discordance_opts['categories']) ? " checked" : "") : "";
     echo <<<HTML
 <div class="form-check d-flex align-items-center p-0 mb-2">
-  <input class="form-check-input m-0 me-2" type="checkbox" value="{$category->term_id}" name="categories[]" id="{$category->term_id}"{$checked}>
-  <label class="form-check-label" for="{$category->term_id}">
+  <input class="form-check-input m-0 me-2" type="checkbox" value="{$category->cat_ID}" name="categories[]" id="{$category->cat_ID}"{$checked}>
+  <label class="form-check-label" for="{$category->cat_ID}">
     {$category->name}
   </label>
 </div>
