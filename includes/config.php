@@ -1,6 +1,3 @@
-<div class="notice notice-success is-dismissible d-none" id="discordance-update-prompt">
-    <p>Settings updated successfully.</p>
-</div>
 <div class="container" id="discordance">
     <h1 class="mt-4 mb-4 display-6">
         <?php echo get_admin_page_title() ?>
@@ -34,5 +31,6 @@
                     <a href="https://jinxr.at/donate" target="_blank" style="text-decoration: none; font-weight: 700; color: #777">Buy Me A Coffee</a>
             </div>
         </div>
+        <div class="discordance-alerts"></div>
     </form>
 </div>

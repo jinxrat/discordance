@@ -86,7 +86,19 @@ function insertAtCursor(el, value) {
             .then(response => response.json())
             .then(({ success }) => {
                 submit.removeAttribute('disabled')
-                if (success) return document.querySelector('#discordance-update-prompt').classList.remove('d-none')
+                if (success) {
+                    return document.querySelector('.discordance-alerts').innerHTML = `
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <p class="lead m-0">Settings updated successfully</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`
+                } else {
+                    return document.querySelector('.discordance-alerts').innerHTML = `
+                    <div class="alert alert-warning alert-dismissible fade show">
+                        <p class="lead m-0">Nothing to update</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`
+                }
             })
             .catch((_) => submit.removeAttribute('disabled'))
         return true
