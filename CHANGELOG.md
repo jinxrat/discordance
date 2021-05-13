@@ -2,6 +2,9 @@
 
 ##### 1.0.0
 - Redesign
+- Added %price% variable for WooCommerce sites
+- Different Webhooks per post type
+- Option to disable categories
 
 ##### 0.2.2 - Tags, tags and tags!
 - Added requested %tags% and %hashtags% variables (#1)
