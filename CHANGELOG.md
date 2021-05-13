@@ -1,5 +1,8 @@
 ## Changelog
 
+##### 1.0.1 / 1.0.2 
+- Fixed minor bug
+
 ##### 1.0.0
 - Redesign
 - Added %price% variable for WooCommerce sites
@@ -31,7 +34,7 @@
 ##### 0.1.2 - WordPress' best practices
 - Remove PHP 7 short tags
 
-### 0.1.1 - Improvements
+##### 0.1.1 - Improvements
 - Prevents duplicate webhooks
 - Improvement of the JSON formatter (added pretty button)
 - Added README with relevant information

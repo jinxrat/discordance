@@ -3,7 +3,7 @@
 Plugin Name: Discordance
 Plugin URI: https://github.com/jinxrat/discordance
 Description: An WordPress plugin to send your posts to Discord using Webhooks.
-Version: 1.0.0
+Version: 1.0.2
 Author: JINXRAT
 Author URI: https://jinxr.at/
 Donate link: https://jinxr.at/donate

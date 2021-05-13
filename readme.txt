@@ -4,8 +4,8 @@ Tags: post, webhook, discord, discord server, discord channel, custom types
 Donate link: https://jinxr.at/donate
 Requires PHP: 7.0
 Requires at least: 5.6.0
-Tested up to: 5.7.1
-Stable tag: 1.0.0
+Tested up to: 5.7.2
+Stable tag: 1.0.2
 License: GPLv2 or later
 
 Send your posts to Discord using Webhooks

@@ -1,6 +1,6 @@
 {
   "name": "discordance",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "An WordPress plugin to send your posts to Discord using Webhooks",
   "scripts": {
     "start": "npm install && webpack -d --watch",

@@ -38,7 +38,7 @@ function valid_discord_webhook(value) {
     const format = document.getElementById("format")
     const pretty = document.getElementById("pretty")
     const submit = document.getElementById("submit")
-    const type_webhooks = document.querySelectorAll(".type-webhook")
+    const type_webhooks = [].slice.call(document.querySelectorAll(".type-webhook"))
     webhooks.addEventListener("keyup", function (e) {
         e.preventDefault()
         e.target.value = e.target.value
