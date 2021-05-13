@@ -13,7 +13,7 @@ foreach ($post_types as $post_type) {
     echo <<<HTML
 <div class="border p-3 my-4">
 <label for="{$post_type->name}webhook" class="h5">Discord Webhook for {$post_type->labels->name}</label>
-<input class="form-control"
+<input class="form-control type-webhook"
     name="webhook-{$post_type->name}"
     id="{$post_type->name}webhook"
     placeholder="https://discord.com/api/webhooks/id/token"
